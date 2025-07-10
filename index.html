@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Math Club Problem Archive</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      color: #333;
+    }
+    header {
+      background-color: #2b2d42;
+      color: white;
+      padding: 1em;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    nav a {
+      margin: 0 1em;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .content {
+      display: flex;
+      flex-direction: column;
+      max-width: 800px;
+      margin: 2em auto;
+      padding: 0 1em;
+    }
+    .problem {
+      background: white;
+      margin-bottom: 2em;
+      padding: 1.5em;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .problem:hover {
+      transform: scale(1.01);
+    }
+    .about {
+      background: white;
+      padding: 2em;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: none;
+    }
+    footer {
+      text-align: center;
+      padding: 2em 1em;
+      background: #ddd;
+      margin-top: 4em;
+    }
+    #modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 2000;
+    }
+    #modal-content {
+      background: white;
+      max-width: 90%;
+      margin: 5% auto;
+      padding: 2em;
+      border-radius: 10px;
+      position: relative;
+    }
+    #modal img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    #modal-text {
+      margin-top: 1em;
+      font-size: 1rem;
+    }
+    #close-modal {
+      position: absolute;
+      top: 1em;
+      right: 1em;
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Math Club Problem Archive</h1>
+    <nav>
+      <a href="#" onclick="showHome()">Home</a>
+      <a href="#" onclick="showAbout()">About Us</a>
+    </nav>
+  </header>
+
+  <div class="content" id="home"></div>
+
+  <div class="content about" id="about">
+    <h2>About Our Club</h2>
+    <p>We are a group of passionate students who gather weekly to work through interesting and challenging math problems. Our goal is to foster mathematical curiosity and problem-solving skills through collaboration and exploration.</p>
+  </div>
+
+  <footer>
+    &copy; 2025 Math Club. Built with GitHub Pages.
+  </footer>
+
+  <div id="modal">
+    <div id="modal-content">
+      <span id="close-modal" onclick="closeModal()">&times;</span>
+      <img id="modal-image" src="" alt="Problem image">
+      <div id="modal-text"></div>
+    </div>
+  </div>
+
+  <script>
+    const problemContainer = document.getElementById('home');
+    const aboutSection = document.getElementById('about');
+    const modal = document.getElementById('modal');
+    const modalImage = document.getElementById('modal-image');
+    const modalText = document.getElementById('modal-text');
+
+    function showHome() {
+      problemContainer.style.display = 'flex';
+      aboutSection.style.display = 'none';
+    }
+
+    function showAbout() {
+      problemContainer.style.display = 'none';
+      aboutSection.style.display = 'block';
+    }
+
+    function openProblem(imagePath, discussionPath) {
+      modalImage.src = imagePath;
+      fetch(discussionPath)
+        .then(response => response.text())
+        .then(text => {
+          modalText.textContent = text;
+        })
+        .catch(() => {
+          modalText.textContent = "(No discussion available.)";
+        });
+      modal.style.display = 'block';
+    }
+
+    function closeModal() {
+      modal.style.display = 'none';
+      modalImage.src = '';
+      modalText.textContent = '';
+    }
+
+    // Auto-load all problem folders by scanning an index file
+    fetch('problems/index.json')
+      .then(response => response.json())
+      .then(dates => {
+        dates.forEach(date => {
+          const problemDiv = document.createElement('div');
+          problemDiv.className = 'problem';
+          problemDiv.innerHTML = `<h2>Problem from ${date}</h2><p>Click to view the problem image and discussion.</p>`;
+          problemDiv.onclick = () => openProblem(`problems/${date}/problem.png`, `problems/${date}/discussion.txt`);
+          problemContainer.appendChild(problemDiv);
+        });
+      })
+      .catch(err => {
+        problemContainer.innerHTML = '<p>Could not load problem list.</p>';
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
