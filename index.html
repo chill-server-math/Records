@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Math Club Problem Archive</title>
   <style>
     body {
@@ -25,18 +25,35 @@
       color: white;
       text-decoration: none;
       font-weight: bold;
+      cursor: pointer;
+    }
+    #filters {
+      max-width: 800px;
+      margin: 1em auto;
+      padding: 0 1em;
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      flex-wrap: wrap;
+    }
+    #filters label {
+      font-weight: bold;
+    }
+    #filters select, #filters input[type="date"], #filters button {
+      padding: 0.3em 0.6em;
+      font-size: 1rem;
     }
     .content {
       display: flex;
       flex-direction: column;
       max-width: 800px;
-      margin: 2em auto;
+      margin: 1em auto 2em auto;
       padding: 0 1em;
     }
     .problem {
       background: white;
-      margin-bottom: 2em;
-      padding: 1.5em;
+      margin-bottom: 1.5em;
+      padding: 1.2em;
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       cursor: pointer;
@@ -51,6 +68,8 @@
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       display: none;
+      max-width: 800px;
+      margin: 1em auto;
     }
     footer {
       text-align: center;
@@ -63,69 +82,98 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       background: rgba(0,0,0,0.6);
       z-index: 2000;
-    }
-    #modal-extras img {
-      max-width: 12vw;    
-      max-height: 12vh;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      cursor: pointer;
-      margin: 0 5px;
-      border-radius: 5px;
-      transition: border 0.3s;
-    }
-
-    #modal-extras img:hover {
-      border: 2px solid #2b2d42;
+      overflow-y: auto;
+      justify-content: center;
+      align-items: center;
+      padding: 2em;
+      box-sizing: border-box;
     }
     #modal-content {
-      background: white;
+      position: relative;
       max-width: 90vw;
       max-height: 90vh;
-      overflow-y: auto;
-      max-width: 90%;
-      margin: 5% auto;
+      margin: auto;
       padding: 2em;
       border-radius: 10px;
-      position: relative;
+      background: white;
+      overflow: visible;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      box-sizing: border-box;
     }
     #modal-image {
-      max-width: 33vw;    /* max 1/3 of viewport width */
-      max-height: 33vh;   /* max 1/3 of viewport height */
+      max-width: 33vw;
+      max-height: 33vh;
       width: auto;
       height: auto;
-      display: block;
-      margin: 0 auto;
-      object-fit: contain;  /* keeps aspect ratio */
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      transition: transform 0.5s ease;
+      position: relative;
+      z-index: 10;
     }
     #modal-text {
       margin-top: 1em;
-      font-size: 1rem;
+      max-width: 90vw;
+      white-space: pre-wrap;
+      text-align: center;
+    }
+    #modal-extras {
+      position: relative;
+      width: 100%;
+      height: 160px;
+      margin-top: 1.5em;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      user-select: none;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+    #modal-extras img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transform-origin: center center;
+      transition: transform 0.4s ease, box-shadow 0.3s ease;
+      position: relative;
+      flex-shrink: 0;
+    }
+    #modal-extras img:nth-child(odd) {
+      transform: rotate(-7deg) translateY(5px);
+    }
+    #modal-extras img:nth-child(even) {
+      transform: rotate(6deg) translateY(-5px);
+    }
+    #modal-extras img:hover {
+      box-shadow: 0 6px 15px rgba(43,45,66,0.8);
+      transform: scale(1.15) rotate(0deg) translateY(0);
+      z-index: 15;
     }
     #close-modal {
       position: absolute;
       top: 1em;
       right: 1em;
-      font-size: 1.5em;
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #555;
       cursor: pointer;
+      user-select: none;
+      transition: color 0.3s;
+      z-index: 20;
     }
-    #search-bar {
-      margin-bottom: 2em;
-      display: flex;
-      gap: 1em;
-      align-items: center;
-    }
-    #search-input {
-      flex: 1;
-      padding: 0.5em;
-      font-size: 1em;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+    #close-modal:hover {
+      color: #222;
     }
   </style>
 </head>
@@ -133,16 +181,25 @@
   <header>
     <h1>Math Club Problem Archive</h1>
     <nav>
-      <a href="#" onclick="showHome()">Home</a>
-      <a href="#" onclick="showAbout()">About Us</a>
+      <a onclick="showHome()">Home</a>
+      <a onclick="showAbout()">About Us</a>
     </nav>
   </header>
 
-  <div class="content" id="home">
-    <div id="search-bar">
-      <input type="text" id="search-input" placeholder="Search by date or tag...">
-    </div>
+  <div id="filters">
+    <label for="tag-filter">Filter by Tag:</label>
+    <select id="tag-filter">
+      <option value="">All Tags</option>
+    </select>
+
+    <label for="date-filter">Filter by Date:</label>
+    <input type="date" id="date-filter" />
+
+    <button onclick="applyFilters()">Apply Filters</button>
+    <button onclick="resetFilters()">Reset</button>
   </div>
+
+  <div class="content" id="home"></div>
 
   <div class="content about" id="about">
     <h2>About Our Club</h2>
@@ -150,15 +207,15 @@
   </div>
 
   <footer>
-    &copy; 2025 Chill Sever Math. Built with GitHub Pages.
+    &copy; 2025 Math Club. Built with GitHub Pages.
   </footer>
 
   <div id="modal">
     <div id="modal-content">
-      <div id="modal-extras" style="display: flex; justify-content: center; margin-top: 1em; overflow-x: auto;"></div>
       <span id="close-modal" onclick="closeModal()">&times;</span>
-      <img id="modal-image" src="" alt="Problem image">
+      <img id="modal-image" src="" alt="Problem image" />
       <div id="modal-text"></div>
+      <div id="modal-extras"></div>
     </div>
   </div>
 
@@ -166,94 +223,155 @@
     const problemContainer = document.getElementById('home');
     const aboutSection = document.getElementById('about');
     const modal = document.getElementById('modal');
+    const modalContent = document.getElementById('modal-content');
     const modalImage = document.getElementById('modal-image');
     const modalText = document.getElementById('modal-text');
     const modalExtras = document.getElementById('modal-extras');
-    const searchInput = document.getElementById('search-input');
+
+    const tagFilter = document.getElementById('tag-filter');
+    const dateFilter = document.getElementById('date-filter');
+
+    let allProblems = [];
+    let allTags = [];
 
     function showHome() {
       problemContainer.style.display = 'flex';
       aboutSection.style.display = 'none';
+      document.getElementById('filters').style.display = 'flex';
     }
 
     function showAbout() {
       problemContainer.style.display = 'none';
       aboutSection.style.display = 'block';
-    }
-
-    function openProblem(date, mainImagePath, discussionPath, extras=[]) {
-      modalImage.src = mainImagePath;
-      modalText.textContent = "(Loading discussion...)";
-      modalExtras.innerHTML = ''; // clear old extras
-
-      fetch(discussionPath)
-        .then(res => res.text())
-        .then(text => {
-          modalText.textContent = text;
-        })
-        .catch(() => {
-          modalText.textContent = "(No discussion available.)";
-        });
-
-      // Create thumbnails for extras
-      extras.forEach(extraPath => {
-        const thumb = document.createElement('img');
-        thumb.src = `problems/${date}/${extraPath}`;
-        thumb.style.width = '80px';
-        thumb.style.margin = '0 5px';
-        thumb.style.cursor = 'pointer';
-        thumb.onclick = () => {
-          modalImage.src = thumb.src;
-        };
-        modalExtras.appendChild(thumb);
-      });
-
-      modal.style.display = 'block';
+      document.getElementById('filters').style.display = 'none';
     }
 
     function closeModal() {
       modal.style.display = 'none';
       modalImage.src = '';
       modalText.textContent = '';
+      modalExtras.innerHTML = '';
     }
 
-    let problems = [];
-    function renderProblems(filter = '') {
-      const cards = problems
-        .filter(p => p.date.includes(filter) || p.tags.some(tag => tag.includes(filter.toLowerCase())))
-        .map(p => {
-          const div = document.createElement('div');
-          div.className = 'problem';
-          div.innerHTML = `<h2>Problem from ${p.date}</h2><p>Tags: ${p.tags.join(', ')}</p><p>Click to view the problem image and discussion.</p>`;
-          div.onclick = () => openProblem(`problems/${p.date}/problem.png`, `problems/${p.date}/discussion.txt`);
-          return div;
-        });
+    let originalMainImage = '';
+    let currentMainImage = '';
 
-      // Clear old
-      problemContainer.querySelectorAll('.problem').forEach(e => e.remove());
-      cards.forEach(card => problemContainer.appendChild(card));
+    function openProblem(date, mainImagePath, discussionPath, extras=[]) {
+      originalMainImage = mainImagePath;
+      currentMainImage = mainImagePath;
+      modalImage.style.transform = 'scale(1) rotate(0deg)';
+      modalImage.src = mainImagePath;
+      modalText.textContent = "(Loading discussion...)";
+      modalExtras.innerHTML = '';
+
+      fetch(discussionPath)
+        .then(res => res.text())
+        .then(text => modalText.textContent = text)
+        .catch(() => modalText.textContent = "(No discussion available.)");
+
+      // Add extras thumbnails with detective-board style
+      extras.forEach(extraPath => {
+        const thumb = document.createElement('img');
+        thumb.src = `problems/${date}/${extraPath}`;
+        thumb.alt = "Extra image";
+        thumb.title = "Extra Image";
+        thumb.onclick = (e) => {
+          e.stopPropagation();
+          animateToCenter(thumb.src);
+        };
+        modalExtras.appendChild(thumb);
+      });
+
+      // Click outside extras resets main image to original
+      modalContent.onclick = (e) => {
+        // If click on extras container or main image, ignore
+        if (e.target.parentElement === modalExtras || e.target === modalImage) {
+          return;
+        }
+        animateToCenter(originalMainImage);
+      };
+
+      modal.style.display = 'flex';
     }
 
-    searchInput.addEventListener('input', () => {
-      renderProblems(searchInput.value.trim().toLowerCase());
-    });
+    function animateToCenter(imageSrc) {
+      if (currentMainImage === imageSrc) return;
+      // Animate shrink then switch image then expand
+      modalImage.style.transform = 'scale(0.7) rotate(-5deg)';
+      setTimeout(() => {
+        modalImage.src = imageSrc;
+        modalImage.style.transform = 'scale(1) rotate(0deg)';
+        currentMainImage = imageSrc;
+      }, 250);
+    }
 
-    fetch('problems/index.json')
-      .then(response => response.json())
-      .then(problems => {
-        problems.forEach(problem => {
-          const problemDiv = document.createElement('div');
-          problemDiv.className = 'problem';
-          problemDiv.innerHTML = `<h2>Problem from ${problem.date}</h2><p>Tags: ${problem.tags.join(', ')}</p><p>Click to view the problem image and discussion.</p>`;
-          problemDiv.onclick = () => openProblem(
-            problem.date,
-            `problems/${problem.date}/problem.png`,
-            `problems/${problem.date}/discussion.txt`,
-            problem.extras || []
-          );
-          problemContainer.appendChild(problemDiv);
+    function renderProblems(problems) {
+      problemContainer.innerHTML = '';
+      if (problems.length === 0) {
+        problemContainer.innerHTML = '<p>No problems match your filter.</p>';
+        return;
+      }
+      problems.forEach(problem => {
+        const div = document.createElement('div');
+        div.className = 'problem';
+        div.innerHTML = `<h2>Problem from ${problem.date}</h2><p>Tags: ${problem.tags.join(', ')}</p><p>Click to view the problem image and discussion.</p>`;
+        div.onclick = () => openProblem(
+          problem.date,
+          `problems/${problem.date}/problem.png`,
+          `problems/${problem.date}/discussion.txt`,
+          problem.extras || []
+        );
+        problemContainer.appendChild(div);
+      });
+    }
+
+    function applyFilters() {
+      const selectedTag = tagFilter.value;
+      const selectedDate = dateFilter.value;
+
+      let filtered = allProblems;
+
+      if (selectedTag) {
+        filtered = filtered.filter(p => p.tags.includes(selectedTag));
+      }
+      if (selectedDate) {
+        filtered = filtered.filter(p => p.date === selectedDate);
+      }
+
+      renderProblems(filtered);
+    }
+
+    function resetFilters() {
+      tagFilter.value = '';
+      dateFilter.value = '';
+      renderProblems(allProblems);
+    }
+
+    // Load tags.json and populate tag dropdown
+    fetch('tags.json')
+      .then(res => res.json())
+      .then(tags => {
+        allTags = tags;
+        tags.forEach(tag => {
+          const opt = document.createElement('option');
+          opt.value = tag;
+          opt.textContent = tag;
+          tagFilter.appendChild(opt);
         });
       });
+
+    // Load problems/index.json and render problems
+    fetch('problems/index.json')
+      .then(res => res.json())
+      .then(problems => {
+        allProblems = problems;
+        renderProblems(allProblems);
+      })
+      .catch(() => {
+        problemContainer.innerHTML = '<p>Could not load problem list.</p>';
+      });
+
+    showHome();
   </script>
 </body>
 </html>
