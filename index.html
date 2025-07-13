@@ -68,6 +68,10 @@
       background: rgba(0,0,0,0.6);
       z-index: 2000;
     }
+    #modal-extras img:hover {
+      border: 2px solid #2b2d42;
+      border-radius: 5px;
+    }
     #modal-content {
       background: white;
       max-width: 90%;
@@ -93,6 +97,19 @@
       font-size: 1.5em;
       cursor: pointer;
     }
+    #search-bar {
+      margin-bottom: 2em;
+      display: flex;
+      gap: 1em;
+      align-items: center;
+    }
+    #search-input {
+      flex: 1;
+      padding: 0.5em;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
@@ -104,7 +121,11 @@
     </nav>
   </header>
 
-  <div class="content" id="home"></div>
+  <div class="content" id="home">
+    <div id="search-bar">
+      <input type="text" id="search-input" placeholder="Search by date or tag...">
+    </div>
+  </div>
 
   <div class="content about" id="about">
     <h2>About Our Club</h2>
@@ -112,11 +133,12 @@
   </div>
 
   <footer>
-    &copy; 2025 Math Club. Built with GitHub Pages.
+    &copy; 2025 Chill Sever Math. Built with GitHub Pages.
   </footer>
 
   <div id="modal">
     <div id="modal-content">
+      <div id="modal-extras" style="display: flex; justify-content: center; margin-top: 1em; overflow-x: auto;"></div>
       <span id="close-modal" onclick="closeModal()">&times;</span>
       <img id="modal-image" src="" alt="Problem image">
       <div id="modal-text"></div>
@@ -129,6 +151,8 @@
     const modal = document.getElementById('modal');
     const modalImage = document.getElementById('modal-image');
     const modalText = document.getElementById('modal-text');
+    const modalExtras = document.getElementById('modal-extras');
+    const searchInput = document.getElementById('search-input');
 
     function showHome() {
       problemContainer.style.display = 'flex';
@@ -140,16 +164,33 @@
       aboutSection.style.display = 'block';
     }
 
-    function openProblem(imagePath, discussionPath) {
-      modalImage.src = imagePath;
+    function openProblem(date, mainImagePath, discussionPath, extras=[]) {
+      modalImage.src = mainImagePath;
+      modalText.textContent = "(Loading discussion...)";
+      modalExtras.innerHTML = ''; // clear old extras
+
       fetch(discussionPath)
-        .then(response => response.text())
+        .then(res => res.text())
         .then(text => {
           modalText.textContent = text;
         })
         .catch(() => {
           modalText.textContent = "(No discussion available.)";
         });
+
+      // Create thumbnails for extras
+      extras.forEach(extraPath => {
+        const thumb = document.createElement('img');
+        thumb.src = `problems/${date}/${extraPath}`;
+        thumb.style.width = '80px';
+        thumb.style.margin = '0 5px';
+        thumb.style.cursor = 'pointer';
+        thumb.onclick = () => {
+          modalImage.src = thumb.src;
+        };
+        modalExtras.appendChild(thumb);
+      });
+
       modal.style.display = 'block';
     }
 
@@ -159,21 +200,42 @@
       modalText.textContent = '';
     }
 
-    // Auto-load all problem folders by scanning an index file
+    let problems = [];
+    function renderProblems(filter = '') {
+      const cards = problems
+        .filter(p => p.date.includes(filter) || p.tags.some(tag => tag.includes(filter.toLowerCase())))
+        .map(p => {
+          const div = document.createElement('div');
+          div.className = 'problem';
+          div.innerHTML = `<h2>Problem from ${p.date}</h2><p>Tags: ${p.tags.join(', ')}</p><p>Click to view the problem image and discussion.</p>`;
+          div.onclick = () => openProblem(`problems/${p.date}/problem.png`, `problems/${p.date}/discussion.txt`);
+          return div;
+        });
+
+      // Clear old
+      problemContainer.querySelectorAll('.problem').forEach(e => e.remove());
+      cards.forEach(card => problemContainer.appendChild(card));
+    }
+
+    searchInput.addEventListener('input', () => {
+      renderProblems(searchInput.value.trim().toLowerCase());
+    });
+
     fetch('problems/index.json')
       .then(response => response.json())
-      .then(dates => {
-        dates.forEach(date => {
+      .then(problems => {
+        problems.forEach(problem => {
           const problemDiv = document.createElement('div');
           problemDiv.className = 'problem';
-          problemDiv.innerHTML = `<h2>Problem from ${date}</h2><p>Click to view the problem image and discussion.</p>`;
-          problemDiv.onclick = () => openProblem(`problems/${date}/problem.png`, `problems/${date}/discussion.txt`);
+          problemDiv.innerHTML = `<h2>Problem from ${problem.date}</h2><p>Tags: ${problem.tags.join(', ')}</p><p>Click to view the problem image and discussion.</p>`;
+          problemDiv.onclick = () => openProblem(
+            problem.date,
+            `problems/${problem.date}/problem.png`,
+            `problems/${problem.date}/discussion.txt`,
+            problem.extras || []
+          );
           problemContainer.appendChild(problemDiv);
         });
-      })
-      .catch(err => {
-        problemContainer.innerHTML = '<p>Could not load problem list.</p>';
-        console.error(err);
       });
   </script>
 </body>
