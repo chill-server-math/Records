@@ -103,13 +103,14 @@
       overflow: visible;
       display: flex;
       justify-content: center;
-      align-items: center;
-      flex-direction: column;
+      align-items: flex-start;
+      flex-direction: row;
+      gap: 2em;
       box-sizing: border-box;
     }
     #modal-image {
       max-width: 33vw;
-      max-height: 33vh;
+      max-height: 60vh;
       width: auto;
       height: auto;
       border-radius: 6px;
@@ -119,23 +120,24 @@
       z-index: 10;
     }
     #modal-text {
-      margin-top: 1em;
-      max-width: 90vw;
+      max-width: 33vw;
+      height: 60vh;
+      overflow-y: auto;
       white-space: pre-wrap;
-      text-align: center;
+      text-align: left;
+      border: 1px solid #ccc;
+      padding: 1em;
+      border-radius: 8px;
+      background: #fafafa;
+      box-sizing: border-box;
     }
     #modal-extras {
-      position: relative;
-      width: 100%;
-      height: 160px;
-      margin-top: 1.5em;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       gap: 15px;
       user-select: none;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      padding-bottom: 10px;
+      max-height: 60vh;
+      overflow-y: auto;
     }
     #modal-extras img {
       width: 100px;
@@ -147,33 +149,17 @@
       transform-origin: center center;
       transition: transform 0.4s ease, box-shadow 0.3s ease;
       position: relative;
-      flex-shrink: 0;
     }
     #modal-extras img:nth-child(odd) {
-      transform: rotate(-7deg) translateY(5px);
+      transform: rotate(-7deg);
     }
     #modal-extras img:nth-child(even) {
-      transform: rotate(6deg) translateY(-5px);
+      transform: rotate(6deg);
     }
     #modal-extras img:hover {
       box-shadow: 0 6px 15px rgba(43,45,66,0.8);
-      transform: scale(1.15) rotate(0deg) translateY(0);
+      transform: scale(1.15) rotate(0deg);
       z-index: 15;
-    }
-    #close-modal {
-      position: absolute;
-      top: 1em;
-      right: 1em;
-      font-size: 1.8em;
-      font-weight: bold;
-      color: #555;
-      cursor: pointer;
-      user-select: none;
-      transition: color 0.3s;
-      z-index: 20;
-    }
-    #close-modal:hover {
-      color: #222;
     }
   </style>
 </head>
@@ -269,7 +255,6 @@
         .then(text => modalText.textContent = text)
         .catch(() => modalText.textContent = "(No discussion available.)");
 
-      // Add extras thumbnails with detective-board style
       extras.forEach(extraPath => {
         const thumb = document.createElement('img');
         thumb.src = `problems/${date}/${extraPath}`;
@@ -282,12 +267,8 @@
         modalExtras.appendChild(thumb);
       });
 
-      // Click outside extras resets main image to original
       modalContent.onclick = (e) => {
-        // If click on extras container or main image, ignore
-        if (e.target.parentElement === modalExtras || e.target === modalImage) {
-          return;
-        }
+        if (e.target.parentElement === modalExtras || e.target === modalImage) return;
         animateToCenter(originalMainImage);
       };
 
@@ -296,8 +277,9 @@
 
     function animateToCenter(imageSrc) {
       if (currentMainImage === imageSrc) return;
-      // Animate shrink then switch image then expand
-      modalImage.style.transform = 'scale(0.7) rotate(-5deg)';
+      // Random left or right rotation for animation
+      const rotation = Math.random() < 0.5 ? -5 : 5;
+      modalImage.style.transform = `scale(0.7) rotate(${rotation}deg)`;
       setTimeout(() => {
         modalImage.src = imageSrc;
         modalImage.style.transform = 'scale(1) rotate(0deg)';
