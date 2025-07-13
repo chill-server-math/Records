@@ -77,69 +77,51 @@
       background: #ddd;
       margin-top: 4em;
     }
-    #modal {
-      display: none;
+
+    /* --- MODAL + SIDEBARS --- */
+    /* Discussion container - left side */
+    #modal-text-container {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.6);
-      z-index: 2000;
+      top: 50%;
+      left: 1vw;
+      transform: translateY(-50%);
+      max-height: 80vh;
+      width: 25vw;
       overflow-y: auto;
-      justify-content: center;
-      align-items: center;
-      padding: 2em;
+      background: #fafafa;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 1em;
       box-sizing: border-box;
-    }
-    #modal-content {
-      position: relative;
-      max-width: 90vw;
-      max-height: 90vh;
-      margin: auto;
-      padding: 2em;
-      border-radius: 10px;
-      background: white;
-      overflow: visible;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      flex-direction: row;
-      gap: 2em;
-      box-sizing: border-box;
-    }
-    #modal-image {
-      max-width: 33vw;
-      max-height: 60vh;
-      width: auto;
-      height: auto;
-      border-radius: 6px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      transition: transform 0.5s ease;
-      position: relative;
-      z-index: 10;
-    }
-    #modal-text {
-      max-width: 33vw;
-      height: 60vh;
-      overflow-y: auto;
+      z-index: 2001;
+      display: none; /* hidden initially */
       white-space: pre-wrap;
       text-align: left;
-      border: 1px solid #ccc;
-      padding: 1em;
-      border-radius: 8px;
-      background: #fafafa;
-      box-sizing: border-box;
+      font-size: 1rem;
+      line-height: 1.4;
     }
-    #modal-extras {
-      display: flex;
+
+    /* Extras container - right side */
+    #modal-extras-container {
+      position: fixed;
+      top: 50%;
+      right: 1vw;
+      transform: translateY(-50%);
+      max-height: 80vh;
+      max-width: 140px;
+      overflow-y: auto;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 1em;
+      box-sizing: border-box;
+      display: none; /* hidden initially */
       flex-direction: column;
       gap: 15px;
       user-select: none;
-      max-height: 60vh;
-      overflow-y: auto;
+      z-index: 2001;
     }
-    #modal-extras img {
+    #modal-extras-container img {
       width: 100px;
       height: 100px;
       object-fit: cover;
@@ -149,17 +131,66 @@
       transform-origin: center center;
       transition: transform 0.4s ease, box-shadow 0.3s ease;
       position: relative;
+      flex-shrink: 0;
+      margin-bottom: 15px;
     }
-    #modal-extras img:nth-child(odd) {
+    #modal-extras-container img:nth-child(odd) {
       transform: rotate(-7deg);
     }
-    #modal-extras img:nth-child(even) {
+    #modal-extras-container img:nth-child(even) {
       transform: rotate(6deg);
     }
-    #modal-extras img:hover {
+    #modal-extras-container img:hover {
       box-shadow: 0 6px 15px rgba(43,45,66,0.8);
       transform: scale(1.15) rotate(0deg);
       z-index: 15;
+    }
+
+    /* Modal center container */
+    #modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 40vw;
+      max-height: 80vh;
+      background: white;
+      border-radius: 10px;
+      padding: 2em;
+      box-sizing: border-box;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+      display: none; /* hidden initially */
+      justify-content: center;
+      align-items: center;
+      z-index: 2002;
+      overflow: visible;
+    }
+    #modal-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: visible;
+    }
+
+    /* Modal close button */
+    #close-modal {
+      position: absolute;
+      top: 0.5em;
+      right: 1em;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #555;
+      user-select: none;
+      z-index: 3000;
+    }
+
+    /* Main image */
+    #modal-image {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      transition: transform 0.5s ease;
     }
   </style>
 </head>
@@ -196,23 +227,31 @@
     &copy; 2025 Math Club. Built with GitHub Pages.
   </footer>
 
+  <!-- Discussion container -->
+  <div id="modal-text-container">
+    <div id="modal-text">Loading discussion...</div>
+  </div>
+
+  <!-- Main modal center -->
   <div id="modal">
+    <span id="close-modal">&times;</span>
     <div id="modal-content">
-      <span id="close-modal" onclick="closeModal()">&times;</span>
       <img id="modal-image" src="" alt="Problem image" />
-      <div id="modal-text"></div>
-      <div id="modal-extras"></div>
     </div>
   </div>
+
+  <!-- Extras container -->
+  <div id="modal-extras-container"></div>
 
   <script>
     const problemContainer = document.getElementById('home');
     const aboutSection = document.getElementById('about');
     const modal = document.getElementById('modal');
-    const modalContent = document.getElementById('modal-content');
-    const modalImage = document.getElementById('modal-image');
+    const modalTextContainer = document.getElementById('modal-text-container');
     const modalText = document.getElementById('modal-text');
-    const modalExtras = document.getElementById('modal-extras');
+    const modalImage = document.getElementById('modal-image');
+    const modalExtrasContainer = document.getElementById('modal-extras-container');
+    const closeModalBtn = document.getElementById('close-modal');
 
     const tagFilter = document.getElementById('tag-filter');
     const dateFilter = document.getElementById('date-filter');
@@ -232,23 +271,25 @@
       document.getElementById('filters').style.display = 'none';
     }
 
+    closeModalBtn.onclick = closeModal;
+
     function closeModal() {
       modal.style.display = 'none';
+      modalTextContainer.style.display = 'none';
+      modalExtrasContainer.style.display = 'none';
       modalImage.src = '';
       modalText.textContent = '';
-      modalExtras.innerHTML = '';
+      modalExtrasContainer.innerHTML = '';
     }
 
     let originalMainImage = '';
-    let currentMainImage = '';
 
     function openProblem(date, mainImagePath, discussionPath, extras=[]) {
       originalMainImage = mainImagePath;
-      currentMainImage = mainImagePath;
       modalImage.style.transform = 'scale(1) rotate(0deg)';
       modalImage.src = mainImagePath;
-      modalText.textContent = "(Loading discussion...)";
-      modalExtras.innerHTML = '';
+      modalText.textContent = "Loading discussion...";
+      modalExtrasContainer.innerHTML = '';
 
       fetch(discussionPath)
         .then(res => res.text())
@@ -260,30 +301,47 @@
         thumb.src = `problems/${date}/${extraPath}`;
         thumb.alt = "Extra image";
         thumb.title = "Extra Image";
+
+        const isOdd = modalExtrasContainer.children.length % 2 === 0;
+        thumb.style.transform = isOdd ? 'rotate(-7deg)' : 'rotate(6deg)';
+        thumb.onmouseenter = () => {
+          thumb.style.transform = 'scale(1.15) rotate(0deg)';
+          thumb.style.boxShadow = '0 6px 15px rgba(43,45,66,0.8)';
+          thumb.style.zIndex = '15';
+        };
+        thumb.onmouseleave = () => {
+          thumb.style.transform = isOdd ? 'rotate(-7deg)' : 'rotate(6deg)';
+          thumb.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+          thumb.style.zIndex = '0';
+        };
+
         thumb.onclick = (e) => {
           e.stopPropagation();
           animateToCenter(thumb.src);
         };
-        modalExtras.appendChild(thumb);
+
+        modalExtrasContainer.appendChild(thumb);
       });
 
-      modalContent.onclick = (e) => {
-        if (e.target.parentElement === modalExtras || e.target === modalImage) return;
-        animateToCenter(originalMainImage);
-      };
-
       modal.style.display = 'flex';
+      modalTextContainer.style.display = 'block';
+      modalExtrasContainer.style.display = 'flex';
     }
 
+    // New handler: clicking the center modal image area resets to original main image
+    modal.onclick = (e) => {
+      if (e.target === modalImage || e.target === modal) {
+        animateToCenter(originalMainImage);
+      }
+    };
+
     function animateToCenter(imageSrc) {
-      if (currentMainImage === imageSrc) return;
-      // Random left or right rotation for animation
+      if (modalImage.src === imageSrc) return;
       const rotation = Math.random() < 0.5 ? -5 : 5;
       modalImage.style.transform = `scale(0.7) rotate(${rotation}deg)`;
       setTimeout(() => {
         modalImage.src = imageSrc;
         modalImage.style.transform = 'scale(1) rotate(0deg)';
-        currentMainImage = imageSrc;
       }, 250);
     }
 
