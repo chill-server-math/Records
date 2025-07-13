@@ -68,23 +68,40 @@
       background: rgba(0,0,0,0.6);
       z-index: 2000;
     }
+    #modal-extras img {
+      max-width: 12vw;    
+      max-height: 12vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      cursor: pointer;
+      margin: 0 5px;
+      border-radius: 5px;
+      transition: border 0.3s;
+    }
+
     #modal-extras img:hover {
       border: 2px solid #2b2d42;
-      border-radius: 5px;
     }
     #modal-content {
       background: white;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow-y: auto;
       max-width: 90%;
       margin: 5% auto;
       padding: 2em;
       border-radius: 10px;
       position: relative;
     }
-    #modal img {
-      max-width: 100%;
+    #modal-image {
+      max-width: 33vw;    /* max 1/3 of viewport width */
+      max-height: 33vh;   /* max 1/3 of viewport height */
+      width: auto;
       height: auto;
       display: block;
       margin: 0 auto;
+      object-fit: contain;  /* keeps aspect ratio */
     }
     #modal-text {
       margin-top: 1em;

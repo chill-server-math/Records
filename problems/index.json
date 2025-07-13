@@ -1,17 +1,13 @@
 [
   {
-    "date": "2025-07-01",
-    "tags": [],
-    "extras": []
-  },
-  {
-    "date": "2025-07-05",
-    "tags": [],
-    "extras": []
-  },
-  {
     "date": "2025-07-12",
-    "tags": [],
-    "extras": []
+    "tags": [
+      "combinatorics"
+    ],
+    "extras": [
+      "extras/Noto_Emoji_v2.034_1f480.svg.png",
+      "extras/image.png",
+      "extras/graph_dl.png"
+    ]
   }
 ]
