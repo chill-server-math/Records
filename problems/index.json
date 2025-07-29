@@ -9,5 +9,23 @@
       "extras/image.png",
       "extras/graph_dl.png"
     ]
+  },
+  {
+    "date": "2025-07-15",
+    "tags": [
+      "algebra"
+    ],
+    "extras": [
+      "extras/Noto_Emoji_v2.034_1f480.svg.png"
+    ]
+  },
+  {
+    "date": "2025-07-29",
+    "tags": [
+      "geometry"
+    ],
+    "extras": [
+      "extras/image_png(1).png"
+    ]
   }
 ]
