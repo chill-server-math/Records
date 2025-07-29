@@ -1,0 +1,1 @@
+The diagonal of the bigger square is sqrt(2) and similarly the diagonals of the smaller squares, if we let s be the side length), are sqrt(2)*s. The diagonal of the larger square can be broken down into two small diagonals and a side length. We get then that sqrt(2)=(1+2*sqrt(2))s and solving for s, we get (4-sqrt(2))/7, which means that a+b=4+7=11.
