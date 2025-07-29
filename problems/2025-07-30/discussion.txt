@@ -1,0 +1,1 @@
+We cheesed the problem by measuring it out. I found that the missing side was about 2 diameters minus a length that was about 200/3. This gave us 499, which is pretty close to the ans choice of 500.
