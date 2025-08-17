@@ -1,0 +1,1 @@
+The large cookie has radius 3, since the center cookie’s center coincides with the large cookie’s center. The difference in area between the large cookie and the seven small cookies is 3²π − 7π = 9π − 7π = 2π. This leftover area is the scrap cookie, so its radius is √2. The answer is (A) √2.

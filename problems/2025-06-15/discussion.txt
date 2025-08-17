@@ -1,0 +1,1 @@
+The number of twos in the sum can range from 0 up to 1008, increasing in steps of 3 since lcm(2, 3) = 6. That means the possible values are 0, 3, 6, …, 1008. The total count is (1008 − 0)/3 + 1 = 337. So the answer is (C) 337.

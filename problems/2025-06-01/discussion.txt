@@ -1,0 +1,1 @@
+Take a point (x, y). Reflecting it across the x-axis sends it to (x, −y). Rotating this point 90° counterclockwise about the origin gives (y, x). The transformation that reverses this effect is reflection across the line y = x. Therefore, the answer is (D).
