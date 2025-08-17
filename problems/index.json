@@ -1,73 +1,31 @@
 [
   {
-    "date": "2025-06-01",
+    "date": "2025-07-15",
     "tags": [
-      "geometry"
+      "combinatorics"
     ],
-    "extras": []
-  },
-  {
-    "date": "2025-06-08",
-    "tags": [
-      "geometry"
-    ],
-    "extras": []
-  },
-  {
-    "date": "2025-06-15",
-    "tags": [
-      "number theory"
-    ],
-    "extras": []
-  },
-  {
-    "date": "2025-06-22",
-    "tags": [
-      "combinatorics",
-      "inequalities"
-    ],
-    "extras": []
-  },
-  {
-    "date": "2025-06-30",
-    "tags": [
-      "geometry"
-    ],
-    "extras": []
-  },
-  {
-    "date": "2025-07-12",
-    "tags": [],
     "extras": [
       "extras/image.png",
       "extras/image2.png"
     ]
   },
   {
-    "date": "2025-07-15",
-    "tags": [
-      "algebra"
-    ],
-    "extras": [
-      "extras/Noto_Emoji_v2.034_1f480.svg.png"
-    ]
-  },
-  {
     "date": "2025-07-29",
     "tags": [
       "geometry"
     ],
     "extras": [
-      "extras/image4.png"
+      "extras/image4.png",
+      "extras/problem (1).png"
     ]
   },
   {
-    "date": "2025-07-29",
+    "date": "2025-07-30",
     "tags": [
       "geometry"
     ],
     "extras": [
-      "extras/image_png(1).png"
+      "extras/work.png"
     ]
   }
 ]
