@@ -1,0 +1,1 @@
+There are infinitely many solutions when the RHS = LHS. Simplifying we get 10x - 2 = ax + x - 2. This is equivalent to 9x = ax, so a = 9.

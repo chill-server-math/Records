@@ -1,0 +1,1 @@
+Let tails = -1 and heads = +1. This can be written as a short random walk, with absorbing states at -4 and 6, starting at 0. This is identical to a random walk from 0 to 10 starting at 4. Expected hitting time Ei = i(N-i), so for N = 10, i = 4, the expected hitting time is 4(10-4)=24
