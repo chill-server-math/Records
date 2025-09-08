@@ -11,6 +11,7 @@ PROBLEMS_DIR = os.path.join(SCRIPT_DIR, "problems")
 INDEX_FILE = os.path.join(PROBLEMS_DIR, "index.json")
 TAGS_FILE = os.path.join(SCRIPT_DIR, "tags.json")
 
+
 IMAGE_NAME = "problem.png"
 TEXT_NAME = "discussion.txt"
 EXTRAS_DIR_NAME = "extras"

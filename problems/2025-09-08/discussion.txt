@@ -1,0 +1,13 @@
+There are 4 numbers of friends possible for each person, 1-4. Notice that there are equal cases for 1 and 4, since each person having one friend is the same as each person not friending exactly one person; similarly, the cases for 2 and 3 are equivalent.  
+
+For the 1 case, choose a friend for person A, and for an arbitrary remaining person, choose a friend for them. There are only two people left, forming the last pair, so we have 5 choices and 3 choices, making 15 combinations.  
+
+For the 2 case, we can imagine a hexagon where each vertex is labeled with a friend, since each edge represents a friend connection and each vertex has 2. There are 6! permutations, but we remove rotationally symmetrical hexagons and "flip" symmetrical hexagons. This means we get 6! / (6 × 2) = 60 combinations.  
+
+There is an additional case where we model the friends as 2 triangles, each vertex as a friend. We arbitrarily choose person A to be in one triangle, and we have 5 choose 2 ways to complete it, giving 10 combinations.  
+
+So the total for the 2 case is 60 + 10 = 70.  
+
+By symmetry, the total for the 3 case is the same as the 2 case (70), and the total for the 4 case is the same as the 1 case (15).  
+
+Final total = 2 × (70 + 15) = 170.
