@@ -404,13 +404,12 @@
     fetch('problems/index.json')
       .then(res => res.json())
       .then(problems => {
-        allProblems = problems;
+        allProblems = problems.sort((a, b) => new Date(b.date) - new Date(a.date));
         renderProblems(allProblems);
       })
       .catch(() => {
         problemContainer.innerHTML = '<p>Could not load problem list.</p>';
       });
-
     showHome();
   </script>
 </body>
