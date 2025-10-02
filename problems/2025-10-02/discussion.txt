@@ -27,6 +27,6 @@ There is only one possible case (stand on 6, 8)
 
 In Total, case 3 has 16 cases
 
-Case 4: Choose a person at random and label him even. Label the next person odd and continue, alternating labels.It is easy to see that either all the evens or all the odds must be standing, for 2 cases. 
+Case 4: Choose a person at random and label him even. Label the next person odd and continue, alternating labels. It is easy to see that either all the evens or all the odds must be standing, for 2 cases. 
 
-Adding all the cases up we get 1 + 8 + 20 + 16 + 2 = 47, so the solutioin is 47/256
+Adding all the cases up we get 1 + 8 + 20 + 16 + 2 = 47, so the solution is 47/256
