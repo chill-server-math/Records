@@ -1,0 +1,32 @@
+We solve by counting up the amount of valid cases, and then dividing by the total number of arrangements. 2^8 = 256, so we divide by 256.
+Notice that we can have at msot 4 people standing up, as otherwise we will have a greater number of people standing than sitting. Seeing this, we attempt casework.
+
+Case 0: Nobody is standing up, there is only 1 possible case.
+
+Case 1: 1 person is standing up. 8 possible people who can stand, so 8 cases.
+
+Case 2: First choice is 8, then second choice has 5 possible people who can stand. We then divide by 2 to remove the overlapping cases. 20 cases.
+
+Case 3: We used counting. Unroll the circle and label it from 1-8. When counting, we only consider adding a person if their index is greater than n+1 the index currently added, to avoid repeat cases.
+
+Subcase 1&2:
+Both Choices of first person in the form
+10000000
+01000000
+Leave 5 empty spaces for the last two people to stand. 
+With these 5, starting with
+10000, 01000, 00100
+Leaves 3, 2, and 1 possible place for the last person respectively.
+
+Subcase 3:
+Starting with the first person at the third position leaves 4 possible squares for the last person. The possible choices of the last two result in 2 and 1 cases, for a total of 3 cases
+00100000
+Subcase 4:
+There is only one possible case (stand on 6, 8)
+00010000
+
+In Total, case 3 has 16 cases
+
+Case 4: Choose a person at random and label him even. Label the next person odd and continue, alternating labels.It is easy to see that either all the evens or all the odds must be standing, for 2 cases. 
+
+Adding all the cases up we get 1 + 8 + 20 + 16 + 2 = 47, so the solutioin is 47/256
