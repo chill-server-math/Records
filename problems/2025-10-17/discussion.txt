@@ -1,0 +1,2 @@
+Let x be twins, y be triplets, and z be quadruplets. We know 4y:z and 3x:y, so we can get 12x:4y:z. 
+We then know there is some scalar A such that A(12x + 4y + z) = 1000. Plugging in the corrosponding amounts of babies into x,y, and z, we get A(40) = 1000 so A = 25. Therefore, our final ratio has 25z, which is 100 babies.
