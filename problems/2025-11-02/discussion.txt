@@ -1,0 +1,1 @@
+We can simplify this down to the problem of finding a point r units away from the corners of a unit square. We know that the ratio of the area of the quarter circles to the area of the square equals 1/2. From this, we find 4 * (1/4) * pi * r^2 = 1/2, from which we can solve for r = 1/sqrt(2pi), which is approximately 0.4.

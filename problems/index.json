@@ -115,5 +115,15 @@
       "combinatorics"
     ],
     "extras": []
+  },
+  {
+    "date": "2025-11-02",
+    "tags": [
+      "geometry",
+      "probabilty theory"
+    ],
+    "extras": [
+      "extras/image_png(4).png"
+    ]
   }
 ]
